@@ -1,22 +1,23 @@
 package jh.threading;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 class MultithreadingChallenge {
     static final class SharedInteger {
-        private int i;
+        private AtomicInteger i;
 
         SharedInteger() {
-            i = 0;
+            i = new AtomicInteger(0);
         }
 
         void increment() {
-            i++;
+            i.getAndIncrement();
         }
 
         int get() {
-            return i;
+            return i.get();
         }
     }
 
