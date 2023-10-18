@@ -11,7 +11,18 @@ class MultithreadingChallenge {
             i = 0;
         }
 
-        void increment() {
+        // My understanding is that the problem occurs because two threads access the variable at the same time
+        // before trying to increment.
+        // e.g. let's say Thread A accesses i and gets 5. Before Thread A can increment, Thread B also looks
+        // at the value and also gets 5. Thread A then increments 5 to 6. Thread B also increments from 5 to 6.
+        // So we've called the method twice in reality, but the value has only been increased by 1.
+        // Easiest way to solve is to use syncronized. This will put a lock object around the method,
+        // and only one thread can access at a time.
+        // We can also use AtomicInteger. I will show this in a separate PR.
+        // As regards strengths and weaknesses of the two approaches, I have read that AtomicInteger may be slightly
+        // faster. I will place some very unscientific timings in my README file.
+        // Interestingly, the problem1 test appears to take twice as long with AtomicInteger...
+        synchronized void increment() {
             i++;
         }
 
