@@ -1,3 +1,12 @@
+# Instructions
+
+Instructions for use.
+
+Within Terminal navigate to src/main/java
+Run javac jh/threading/MultithreadingChallenge.java
+Run java -ea jh/threading/MultithreadingChallenge
+Wait 10 and a bit seconds.
+
 # TechTest
 
 I should point out I have used sdkman to set up my Java environment, and am using 17.0.7-tem
