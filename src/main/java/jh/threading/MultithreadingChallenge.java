@@ -40,7 +40,12 @@ class MultithreadingChallenge {
             b = new ReentrantLock();
         }
 
-        void opA() throws InterruptedException {
+        // Here we are faced with a deadlock problem. opA gets lock a, while opB gets lock b. They both
+        // then wait forever (or until they're killed) in a hopeless effort to get the other lock.
+        // To solve we can once again use synchronized.
+        // Alternatively, my first thought was to add a third ReentrantLock to cover both locks, but it
+        // amounts to the same thing. I'll add another PR to show this.
+        synchronized void opA() throws InterruptedException {
             try {
                 a.lock();
                 Thread.sleep(5_000);
@@ -52,7 +57,7 @@ class MultithreadingChallenge {
             }
         }
 
-        void opB() throws InterruptedException {
+        synchronized void opB() throws InterruptedException {
             try {
                 b.lock();
                 Thread.sleep(5_000);
