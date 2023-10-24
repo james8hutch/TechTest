@@ -34,10 +34,14 @@ class MultithreadingChallenge {
     static final class LockOrdering {
         private final ReentrantLock a;
         private final ReentrantLock b;
+        // Reentrant locks provide more flexibility:
+        // https://medium.com/techieahead/reentrant-lock-vs-synchronized-keyword-in-java-7949dd7b3b5a
+        private final ReentrantLock c;
 
         LockOrdering() {
             a = new ReentrantLock();
             b = new ReentrantLock();
+            c = new ReentrantLock();
         }
 
         // Here we are faced with a deadlock problem. opA gets lock a, while opB gets lock b. They both
@@ -47,6 +51,7 @@ class MultithreadingChallenge {
         // amounts to the same thing. I'll add another PR to show this.
         synchronized void opA() throws InterruptedException {
             try {
+                c.lock();
                 a.lock();
                 Thread.sleep(5_000);
                 b.lock();
@@ -54,11 +59,13 @@ class MultithreadingChallenge {
             } finally {
                 b.unlock();
                 a.unlock();
+                c.unlock();
             }
         }
 
         synchronized void opB() throws InterruptedException {
             try {
+                c.lock();
                 b.lock();
                 Thread.sleep(5_000);
                 a.lock();
@@ -66,6 +73,7 @@ class MultithreadingChallenge {
             } finally {
                 a.unlock();
                 b.unlock();
+                c.unlock();
             }
         }
     }
